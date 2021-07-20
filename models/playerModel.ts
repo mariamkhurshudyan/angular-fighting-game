@@ -44,7 +44,8 @@ export class Ranger extends Player{
      return this._lifePercentage;
   } 
 
-  public fight(): number{
-    return Math.round(Math.random() * 10);
+  public fight(){
+    this._lifePercentage -= Math.trunc(Math.random() * 10 + 1);
+    console.log(`${this._name} - ${this._lifePercentage}`);
   }
 }

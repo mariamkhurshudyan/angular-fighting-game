@@ -9,8 +9,10 @@ import { Ranger } from 'models/playerModel';
 
 export class FightingGameComponent implements OnInit {
   isGameStarted : boolean = false;
-  ranger1 = new Ranger("Ranger 1", 0);
-  ranger2 = new Ranger("Ranger 2", 0);
+  ranger: Ranger[] = [
+  new Ranger("Ranger 1", 0),
+  new Ranger("Ranger 2", 0),
+  ]
   constructor() { }
 
   ngOnInit(): void {
@@ -18,9 +20,9 @@ export class FightingGameComponent implements OnInit {
 
   initRanger(type : number){
     if(type === 1){
-      this.ranger1.setPower(5);
+      this.ranger[0].setPower(5);
     }else{
-      this.ranger2.setPower(2);
+      this.ranger[1].setPower(2);
     }
   }
 
@@ -33,26 +35,19 @@ export class FightingGameComponent implements OnInit {
     }, 3000);
     
     while(this.isGameStarted){
-      let result1 = this.ranger1.fight();
-      console.log(`${this.ranger1.getName()} damage ${result1}`);
-      this.ranger2.decreaseLife(result1);
-      console.log(`${this.ranger2.getName()} life - ${this.ranger2.getLifePercentage()}`);
+      this.ranger[0].fight();
       await delay(500);
-      
-      let result2 = this.ranger2.fight();
-      console.log(`${this.ranger2.getName()} damage ${result2}`);
-      this.ranger1.decreaseLife(result2);
-      console.log(`${this.ranger1.getName()} life - ${this.ranger1.getLifePercentage()}`);
+      this.ranger[1].fight();
       await delay(500);
     }
-    let winnerName = (this.ranger1.getLifePercentage() > this.ranger2.getLifePercentage()) ? this.ranger1.getName() : this.ranger2.getName();
+    let winnerName = (this.ranger[0].getLifePercentage() > this.ranger[1].getLifePercentage()) ? this.ranger[0].getName() : this.ranger[1].getName();
     console.log(`Winner is ${winnerName}`);
   }
 
   gameOver(){
     this.isGameStarted = false;
-    this.ranger1.setLifePercentage(100);
-    this.ranger2.setLifePercentage(100);
+    this.ranger[0].setLifePercentage(100);
+    this.ranger[1].setLifePercentage(100);
     clearTimeout(this.timer);
 
   }
